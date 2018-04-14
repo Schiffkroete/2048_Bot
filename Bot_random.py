@@ -48,7 +48,8 @@ def getPositions():
         NewGame = pag.position()
     Diagonal = []
     for t in range(1, 17, 5):
-        if pag.alert("Move the Mouse to Tile " + str(t) + " and press Enter") != "OK":
+        # Tiles start at 1
+        if pag.alert("Move the Mouse to Tile " + str(t) + " and press Enter (your mouse isn't allowed to touch the number)") != "OK":
             raise Exception("Wrong")
         else:
             Diagonal.append(pag.position())
@@ -143,7 +144,7 @@ def indoor():
         legal = legalMoves(Board)
         if not legal: break
         if time.time() > t:
-            t += 120
+            t += displayTime
             if type(Move_score) != str:
                 print("Züge bis zum Ende:", round( max(Move_score) / (Depth/len(legal)), 1 ))
                 print("Durchschnittliche Züge bis zum Ende:", round( sum(Move_score) / Depth, 1 ))
@@ -159,12 +160,15 @@ def indoor():
     displayBoard(Board)
     return i
 
+# Change this to "indoor" or "outdoor"
 Modus = "outdoor"
 if __name__ == '__main__':
     turnTime = 0.3
     if Modus == "indoor":
         while True:
             t = time.time()
+            # After which time the board should be displayed again
+            displayTime = 0
             i = indoor()
             print((time.time()-t) / (i - turnTime))
     elif Modus == "outdoor":
